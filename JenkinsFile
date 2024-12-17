@@ -1,0 +1,29 @@
+pipeline{
+    agent any
+
+    tools{
+        nodejs 'nodejs' //Check whether nodejs is installed or not
+    }
+
+    stages{
+        stage('git checkout'){
+            steps{
+                git branch:'main', url:'https://github.com/nayana357/React-app-to-do.git'
+            }
+        }
+
+        stage('Docker build and tag'){
+            steps{
+                sh "docker build -t nayana357/react-app-to-do-list-app ."
+            }
+        }
+
+        stage('Containerisation'){
+            steps{
+                sh '''
+                docker run -it -d --name c1 -p 9000:80 nayana357/react-app-to-do-list-app
+                '''
+            }
+        }
+    }
+}
